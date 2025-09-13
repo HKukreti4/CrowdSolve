@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model"); // Adjust path as needed
 const errorHandler = require("../utils/error.utility"); // Custom error handler
 
-const protect = async (req, res, next) => {
+const checkLogin = async (req, res, next) => {
     try {
         let token;
 
@@ -32,4 +32,4 @@ const protect = async (req, res, next) => {
     }
 };
 
-module.exports = { protect };
+module.exports = { checkLogin };
