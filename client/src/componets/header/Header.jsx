@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import axiosInstance from "../../utils/axiosInstance";
+import Navbar from "./Navbar";
 
 function Header() {
   const { user, setUser } = useContext(UserContext);
@@ -18,27 +19,13 @@ function Header() {
   useEffect(() => {}, [user]);
   console.log(user);
   return (
-    <header className="bg-blue-600 text-white p-6 text-center">
-      <h1 className="text-4xl font-bold mb-2">CrowdSolve</h1>
-      <p className="text-lg mb-4">
-        Join the community to solve real-world problems together.
-      </p>
-      {user ? (
-        <button onClick={handleLogout}>Logout</button>
-      ) : (
-        <div>
-          <NavLink to="/register">
-            <button className="bg-white text-blue-600 font-bold py-2 cursor-pointer px-4 rounded mr-2">
-              Sign Up
-            </button>
-          </NavLink>
-          <NavLink to="/login">
-            <button className="bg-blue-800 text-white font-bold py-2 cursor-pointer px-4 rounded">
-              Login
-            </button>
-          </NavLink>
-        </div>
-      )}
+    <header className="bg-black text-white min-h-[50vh] p-6 text-center  flex items-center justify-center ">
+      <div>
+        <h1 className="text-4xl font-bold mb-2">CrowdSolve</h1>
+        <p className="text-lg mb-4">
+          Join the community to solve real-world problems together.
+        </p>
+      </div>
     </header>
   );
 }

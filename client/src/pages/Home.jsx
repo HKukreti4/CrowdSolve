@@ -4,6 +4,7 @@ import Header from "./../componets/header/Header";
 import HowItWorks from "./../componets/sections/HowItWork";
 import CTA from "./../componets/sections/CTA";
 import Footer from "./../componets/footer/Footer";
+import RootLayout from "../layouts/RootLayout";
 
 const Home = () => {
   return (
@@ -12,7 +13,6 @@ const Home = () => {
       <FeatureSection />
       <HowItWorks />
       <CTA />
-      <Footer />
     </div>
   );
 };

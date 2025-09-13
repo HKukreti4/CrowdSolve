@@ -5,8 +5,9 @@ import toast from "react-hot-toast";
 import { UserContext } from "../context/UserContext";
 import { useEffect } from "react";
 
-const Login = () => {
+const Register = () => {
   const [loginData, setloginData] = useState({
+    name: "",
     email: "",
     password: "",
   });
@@ -19,12 +20,12 @@ const Login = () => {
     setLoading(true);
     console.log(loginData);
     try {
-      const res = await axiosInstance.post("/auth/login", loginData);
+      const res = await axiosInstance.post("/auth/register", loginData);
       if (res) {
         setUser(res.data.user);
-        navigate("/");
-        setloginData({ email: "", password: "" });
-        toast.success("Login Successfull");
+        navigate("/login");
+        setloginData({ email: "", password: "", name: "" });
+        toast.success("Registration Successfull");
       }
     } catch (error) {
       toast.error(error.response.data.message);
@@ -39,24 +40,40 @@ const Login = () => {
       if (user && user.email) {
         navigate("/");
       } else {
-        navigate("/login");
+        navigate("/register");
       }
     } else {
-      navigate("/login");
+      navigate("/register");
     }
   }, []);
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50 bg-gradient-to-r from-red-400 to-indigo-600">
       <div className="text-center flex flex-col gap-2  bg-white/60 backdrop:blur-2xl  border-2 border-gray-400 py-8 px-12 rounded-md">
         <h3 className="md:text-2xl text-md font-bold text-red-400 capitalize ">
-          Welcome back
+          Register
         </h3>
-        <p>Enter your email and password to access the account</p>
+        <p>Enter your name, email and password to create the account</p>
 
         <form
           onSubmit={(e) => submitHandler(e)}
           className="text-left flex mt-5 flex-col gap-4 items-center"
         >
+          <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="name" className="font-bold">
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={loginData.name}
+              placeholder="Enter name"
+              onChange={(e) =>
+                setloginData({ ...loginData, [e.target.name]: e.target.value })
+              }
+              className="border-[1px] focus:border-green-400 outline-none px-4 py-2 rounded-md"
+            />
+          </div>
           <div className="flex flex-col gap-1 w-full">
             <label htmlFor="email" className="font-bold">
               Email
@@ -101,15 +118,15 @@ const Login = () => {
               type="submit"
               className="bg-gray-500 px-4 w-full cursor-pointer text-white rounded-md py-2"
             >
-              Login
+              Register
             </button>
           )}
         </form>
 
         <p>
-          Don't have an accout ?{" "}
-          <NavLink to={"/register"} className="text-blue-400">
-            Register Now
+          Already have an accout ?{" "}
+          <NavLink to={"/login"} className="text-blue-400">
+            Login
           </NavLink>
         </p>
       </div>
@@ -117,4 +134,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
