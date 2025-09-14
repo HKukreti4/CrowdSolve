@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom"; // If using react-router for navigation
+import { Link, NavLink, useNavigate } from "react-router-dom"; // If using react-router for navigation
 import { UserContext } from "../../context/UserContext";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -23,45 +23,84 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-black  text-white shadow-md px-6 py-3 flex justify-between items-center">
-      {/* Logo Section */}
-      <div className="flex items-center space-x-2">
-        <span className="font-bold text-xl">CrowdSolve</span>
-      </div>
-
-      {/* Navigation Links */}
-      <div className="flex items-center space-x-6">
-        <Link to="/" className="hover:text-blue-600">
-          Home
-        </Link>
-
-        {user ? (
-          <>
-            <Link to="/problems" className="hover:text-blue-600">
+    <>
+      <header className="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xl font-bold">
+            C
+          </div>
+          <h1 className="text-2xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer">
+            CrowdSolve
+          </h1>
+        </div>
+        <nav className="space-x-6 hidden md:flex">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `text-gray-700 hover:text-indigo-600 font-medium ${
+                isActive ? "text-indigo-600 underline" : ""
+              }`
+            }
+          >
+            Home
+          </NavLink>
+          {user ? (
+            <NavLink
+              to="/problems"
+              className={({ isActive }) =>
+                `text-gray-700 hover:text-indigo-600 font-medium ${
+                  isActive ? "text-indigo-600 underline" : ""
+                }`
+              }
+            >
               Problems
-            </Link>
-            <Link to="/problem/post" className="">
-              <button className="px-2 py-1 bg-red-400 rounded-md cursor-pointer">
-                Post a Problem
-              </button>
-            </Link>
+            </NavLink>
+          ) : null}
+
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `text-gray-700 hover:text-indigo-600 font-medium ${
+                isActive ? "text-indigo-600 underline" : ""
+              }`
+            }
+          >
+            About
+          </NavLink>
+        </nav>
+        {user ? (
+          <div>
+            <NavLink
+              to="/problem/post"
+              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+            >
+              Post a problem
+            </NavLink>{" "}
             <button
               onClick={handleLogout}
-              className="px-4 py-1 border rounded hover:bg-gray-500"
+              className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded hover:bg-indigo-100 transition-colors"
             >
               Logout
             </button>
-          </>
+          </div>
         ) : (
-          <Link
-            to="/login"
-            className="px-4 py-1 border rounded hover:bg-blue-100"
-          >
-            Login
-          </Link>
+          <div className="space-x-3">
+            <NavLink
+              to="/login"
+              className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded hover:bg-indigo-100 transition-colors"
+            >
+              Login
+            </NavLink>
+            <NavLink
+              to="/register"
+              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+            >
+              Register
+            </NavLink>
+          </div>
         )}
-      </div>
-    </nav>
+      </header>
+    </>
   );
 };
 
