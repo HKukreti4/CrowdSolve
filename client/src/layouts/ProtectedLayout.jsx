@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, Outlet, replace } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const ProtectedLayout = () => {
@@ -11,7 +11,7 @@ const ProtectedLayout = () => {
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (!user?.email && (!storedUser || !storedUser.email)) {
-      navigate("/login");
+      navigate("/login", { replace: true });
     } else if (!user?.email && storedUser?.email) {
       setUser(storedUser);
     }

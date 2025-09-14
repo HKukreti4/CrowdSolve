@@ -30,7 +30,7 @@ const AddSolutionPage = () => {
 
       if (res.data) {
         toast.success("Solution added successfully!");
-        navigate(`/solutions/${problemId}`); // Redirect to solution page
+        navigate(`/problem/${problemId}`); // Redirect to solution page
       }
     } catch (error) {
       console.error(error);
@@ -38,7 +38,7 @@ const AddSolutionPage = () => {
     } finally {
       setLoading(false);
     }
-  };  
+  };
   return (
     <div className="max-w-2xl mx-auto p-6 mt-20 bg-white shadow rounded-md ">
       <h2 className="text-2xl font-bold mb-4 text-center">Add Solution</h2>

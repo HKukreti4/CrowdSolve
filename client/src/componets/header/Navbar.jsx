@@ -11,6 +11,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/auth/logout");
+      localStorage.clear();
       setUser(null); // ✅ clear user from context
       toast.success("Logged out successfully");
       navigate("/login"); // ✅ redirect if needed

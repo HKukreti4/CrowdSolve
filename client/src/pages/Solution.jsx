@@ -81,7 +81,7 @@ const SolutionPage = () => {
   console.log(user, userId);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8 mt-12 mb-12">
+    <div className="max-w-4xl mx-auto p-6 space-y-8 mt-20 mb-12">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-center mb-4">Solutions</h1>
         <div className="text-center space-y-4">
