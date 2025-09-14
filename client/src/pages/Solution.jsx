@@ -1,12 +1,14 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { UserContext } from "../context/UserContext";
 
 const SolutionPage = () => {
   const { problemId } = useParams(); // Get problem id from route
+  const [searchParams] = useSearchParams();
   const { user } = useContext(UserContext);
+  const userId = searchParams.get("userId");
   const navigate = useNavigate();
 
   const [solutions, setSolutions] = useState([]);
@@ -27,7 +29,7 @@ const SolutionPage = () => {
 
   useEffect(() => {
     fetchSolutions();
-  }, [problemId]);
+  }, [problemId, user]);
 
   const handleUpvote = async (solutionId) => {
     try {
@@ -76,24 +78,21 @@ const SolutionPage = () => {
       <div className="flex justify-center items-center h-64">Loading...</div>
     );
   }
+  console.log(user, userId);
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 mt-12 mb-12">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-center mb-4">Solutions</h1>
         <div className="text-center space-y-4">
-          {user ? (
+          {user.id !== userId ? (
             <button
               onClick={handleAddSolution}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Add Solution
             </button>
-          ) : (
-            <p className="text-sm text-gray-500">
-              Please log in to add a solution.
-            </p>
-          )}
+          ) : null}
         </div>
       </div>
 

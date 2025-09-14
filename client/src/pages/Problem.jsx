@@ -70,8 +70,9 @@ const ProblemPage = () => {
                   <h2 className="text-xl font-semibold text-gray-800">
                     {problem.location}
                   </h2>
-                  <NavLink to={`/problem/${problem._id}`}>
-                    {" "}
+                  <NavLink
+                    to={`/problem/${problem._id}?userId=${problem.user_id._id}`}
+                  >
                     <button className="px-2 py-1 bg-green-400 text-white rounded-md">
                       Show Solutions
                     </button>
