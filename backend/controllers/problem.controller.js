@@ -13,7 +13,9 @@ const uploadProblem = async (req, res) => {
         let imageUrl = null;
         if (req.file) {
             // Save relative path to image_url
-            imageUrl = `/uploads/${req.file.filename}`;
+            imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        } else {
+            imageUrl = "https://cdn.pixabay.com/photo/2021/08/08/15/02/problem-6531137_1280.jpg"
         }
 
         const problem = new Problem({

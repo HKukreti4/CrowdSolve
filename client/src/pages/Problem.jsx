@@ -60,7 +60,7 @@ const ProblemPage = () => {
             >
               {problem.image_url && (
                 <img
-                  src={`http://localhost:4000${problem.image_url}`}
+                  src={problem.image_url}
                   alt="Problem"
                   className="w-full h-48 object-cover"
                 />
