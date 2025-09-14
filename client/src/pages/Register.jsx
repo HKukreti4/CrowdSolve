@@ -34,14 +34,9 @@ const Register = () => {
     }
   };
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user && user.email) {
-        navigate("/");
-      } else {
-        navigate("/register");
-      }
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser.email) {
+      navigate("/");
     } else {
       navigate("/register");
     }

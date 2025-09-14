@@ -10,7 +10,6 @@ const ProblemPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { user, setuser } = useContext(UserContext);
   const fetchProblems = async () => {
     try {
       const response = await axiosInstance.get("/problem");
@@ -23,7 +22,6 @@ const ProblemPage = () => {
     }
   };
   useEffect(() => {
-    if (!user) navigate("/login");
     fetchProblems();
   }, []);
 

@@ -18,7 +18,8 @@ const SolutionPage = () => {
       const res = await axiosInstance.get(`/solution?problem_id=${problemId}`);
       setSolutions(res.data.solutions);
     } catch (error) {
-      toast.error("Failed to load solutions.");
+      // toast.error("Failed to load solutions.");
+      console.log(error);
     } finally {
       setLoading(false);
     }

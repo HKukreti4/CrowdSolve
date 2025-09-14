@@ -12,10 +12,6 @@ const AddSolutionPage = () => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if (!user) {
-    navigate("/login");
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -42,8 +38,7 @@ const AddSolutionPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
+  };  
   return (
     <div className="max-w-2xl mx-auto p-6 mt-20 bg-white shadow rounded-md ">
       <h2 className="text-2xl font-bold mb-4 text-center">Add Solution</h2>

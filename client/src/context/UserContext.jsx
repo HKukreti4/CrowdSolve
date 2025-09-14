@@ -1,11 +1,13 @@
 import { createContext, useState, useEffect } from "react";
 
+// Create the context
 export const UserContext = createContext(null);
 
-// Create the provider component
+// Provider component
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  // Load user from localStorage on initial render
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -13,6 +15,7 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  // Sync user state with localStorage
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));

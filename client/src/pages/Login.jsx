@@ -1,9 +1,8 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import axiosInstance from "./../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { UserContext } from "../context/UserContext";
-import { useEffect } from "react";
 
 const Login = () => {
   const [loginData, setloginData] = useState({
@@ -17,44 +16,43 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(loginData);
     try {
       const res = await axiosInstance.post("/auth/login", loginData);
       if (res) {
+        // Save user to localStorage
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+
+        // Update context
         setUser(res.data.user);
-        navigate("/");
+
+        toast.success("Login Successful");
+        navigate("/"); // go to home after login
         setloginData({ email: "", password: "" });
-        toast.success("Login Successfull");
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
+
+  // Redirect if already logged in
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user && user.email) {
-        navigate("/");
-      } else {
-        navigate("/login");
-      }
-    } else {
-      navigate("/login");
+    if (user?.email) {
+      navigate("/"); // prevent going to login again if already logged in
     }
-  }, []);
+  }, [user, navigate]);
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50 bg-gradient-to-r from-red-400 to-indigo-600">
-      <div className="text-center flex flex-col gap-2  bg-white/60 backdrop:blur-2xl  border-2 border-gray-400 py-8 px-12 rounded-md">
-        <h3 className="md:text-2xl text-md font-bold text-red-400 capitalize ">
+      <div className="text-center flex flex-col gap-2 bg-white/60 backdrop:blur-2xl border-2 border-gray-400 py-8 px-12 rounded-md">
+        <h3 className="md:text-2xl text-md font-bold text-red-400 capitalize">
           Welcome back
         </h3>
         <p>Enter your email and password to access the account</p>
 
         <form
-          onSubmit={(e) => submitHandler(e)}
+          onSubmit={submitHandler}
           className="text-left flex mt-5 flex-col gap-4 items-center"
         >
           <div className="flex flex-col gap-1 w-full">
@@ -92,7 +90,7 @@ const Login = () => {
           {loading ? (
             <button
               type="button"
-              className="bg-gray-500 cursor-not-allowed text-white rounded-md py-2"
+              className="bg-gray-500 cursor-not-allowed text-white rounded-md py-2 w-full"
             >
               Loading ...
             </button>
@@ -107,7 +105,7 @@ const Login = () => {
         </form>
 
         <p>
-          Don't have an accout ?{" "}
+          Don't have an account?{" "}
           <NavLink to={"/register"} className="text-blue-400">
             Register Now
           </NavLink>
