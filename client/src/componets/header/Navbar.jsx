@@ -57,7 +57,7 @@ const Navbar = () => {
             </NavLink>
           ) : null}
 
-          <NavLink
+          {/* <NavLink
             to="/about"
             className={({ isActive }) =>
               `text-gray-700 hover:text-indigo-600 font-medium ${
@@ -66,7 +66,7 @@ const Navbar = () => {
             }
           >
             About
-          </NavLink>
+          </NavLink> */}
         </nav>
         {user ? (
           <div>

@@ -35,7 +35,7 @@ const Register = () => {
   };
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser.email) {
+    if (storedUser?.email) {
       navigate("/");
     } else {
       navigate("/register");
@@ -61,7 +61,7 @@ const Register = () => {
               type="text"
               name="name"
               id="name"
-              value={loginData.name}
+              value={loginData?.name}
               placeholder="Enter name"
               onChange={(e) =>
                 setloginData({ ...loginData, [e.target.name]: e.target.value })
@@ -77,7 +77,7 @@ const Register = () => {
               type="email"
               name="email"
               id="email"
-              value={loginData.email}
+              value={loginData?.email}
               placeholder="Enter email"
               onChange={(e) =>
                 setloginData({ ...loginData, [e.target.name]: e.target.value })
@@ -93,7 +93,7 @@ const Register = () => {
               type="password"
               name="password"
               id="password"
-              value={loginData.password}
+              value={loginData?.password}
               onChange={(e) =>
                 setloginData({ ...loginData, [e.target.name]: e.target.value })
               }
