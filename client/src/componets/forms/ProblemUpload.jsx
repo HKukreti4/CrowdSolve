@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 
@@ -29,12 +28,12 @@ const ProblemUpload = () => {
         formData.append("image", image);
       }
 
-      const token = localStorage.getItem("token"); // assuming token is stored in localStorage
+      const token = localStorage.getItem("token");
 
       const response = await axiosInstance.post("/problem/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // if your backend uses Bearer token
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -45,52 +44,73 @@ const ProblemUpload = () => {
       setImage(null);
     } catch (error) {
       console.error("Error uploading problem:", error);
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || "Failed to upload problem.");
       setMessage(error.response?.data?.message || "Failed to upload problem.");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto  p-4 border rounded shadow  min-h-[75vh]">
-      <h2 className="text-xl font-bold mb-4">Upload a Problem</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="mb-4">
-          <label className="block mb-1 font-semibold">Location:</label>
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-25">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Report a Problem
+      </h2>
+
+      {message && (
+        <div className="bg-yellow-100 text-yellow-800 p-3 rounded mb-4 text-center">
+          {message}
+        </div>
+      )}
+
+      <form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        className="space-y-5"
+      >
+        <div>
+          <label className="block mb-2 text-gray-700 font-medium">
+            Location
+          </label>
           <input
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="w-full border p-2 rounded"
+            placeholder="Enter location"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block mb-1 font-semibold">Description:</label>
+        <div>
+          <label className="block mb-2 text-gray-700 font-medium">
+            Description
+          </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border p-2 rounded"
+            placeholder="Describe the problem in detail..."
             rows="4"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           ></textarea>
         </div>
 
-        <div className="mb-4">
-          <label className="block mb-1 font-semibold">Upload Image:</label>
+        <div>
+          <label className="block mb-2 text-gray-700 font-medium">
+            Upload Image
+          </label>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full border p-2 rounded-md"
+            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
         >
-          Submit
+          Submit Problem
         </button>
       </form>
     </div>

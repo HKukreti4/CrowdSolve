@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { UserContext } from "../context/UserContext";
 
 const SolutionPage = () => {
-  const { problemId } = useParams(); // Get problem id from route
+  const { problemId } = useParams();
   const [searchParams] = useSearchParams();
   const { user } = useContext(UserContext);
   const userId = searchParams.get("userId");
@@ -13,15 +13,14 @@ const SolutionPage = () => {
 
   const [solutions, setSolutions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [commentInputs, setCommentInputs] = useState({}); // For handling multiple inputs
+  const [commentInputs, setCommentInputs] = useState({});
 
   const fetchSolutions = async () => {
     try {
       const res = await axiosInstance.get(`/solution?problem_id=${problemId}`);
       setSolutions(res.data.solutions);
     } catch (error) {
-      // toast.error("Failed to load solutions.");
-      console.log(error);
+      console.error("Failed to load solutions:", error);
     } finally {
       setLoading(false);
     }
@@ -29,7 +28,7 @@ const SolutionPage = () => {
 
   useEffect(() => {
     fetchSolutions();
-  }, [problemId, user]);
+  }, [problemId]);
 
   const handleUpvote = async (solutionId) => {
     try {
@@ -39,7 +38,7 @@ const SolutionPage = () => {
           sol._id === solutionId ? { ...sol, upvotes: res.data.upvotes } : sol
         )
       );
-    } catch (error) {
+    } catch {
       toast.error("Failed to upvote.");
     }
   };
@@ -63,102 +62,105 @@ const SolutionPage = () => {
       );
       setCommentInputs((prev) => ({ ...prev, [solutionId]: "" }));
       toast.success("Comment added.");
-    } catch (error) {
+    } catch {
       toast.error("Failed to add comment.");
     }
   };
 
   const handleAddSolution = () => {
-    // Redirect to a page or open a modal to add a solution
     navigate(`/add-solution/${problemId}`);
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">Loading...</div>
+      <div className="flex justify-center items-center h-64 text-gray-600">
+        Loading solutions...
+      </div>
     );
   }
-  console.log(user, userId);
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 mt-20 mb-12">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-center mb-4">Solutions</h1>
-        <div className="text-center space-y-4">
-          {user.id !== userId ? (
-            <button
-              onClick={handleAddSolution}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Add Solution
-            </button>
-          ) : null}
-        </div>
+        <h1 className="text-3xl font-bold text-gray-800">Solutions</h1>
+        {user.id !== userId && (
+          <button
+            onClick={handleAddSolution}
+            className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition"
+          >
+            Add Solution
+          </button>
+        )}
       </div>
 
       {solutions.length === 0 ? (
-        <p className="text-gray-500">No solutions found for this problem.</p>
+        <div className="text-center text-gray-500 p-6 bg-gray-50 rounded shadow-sm">
+          No solutions found for this problem.
+        </div>
       ) : null}
-      {[...solutions]
-        .sort((a, b) => b.upvotes - a.upvotes)
-        .map((solution) => (
-          <div
-            key={solution._id}
-            className="border rounded-md shadow-sm p-4 space-y-4"
-          >
-            <div className="flex justify-between items-center">
-              <p className="text-gray-700">{solution.description}</p>
-              <button
-                onClick={() => handleUpvote(solution._id)}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-              >
-                Upvote ({solution.upvotes})
-              </button>
-            </div>
 
-            <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Comments</h4>
-              <div className="space-y-2">
-                {solution.comments && solution.comments.length > 0 ? (
-                  solution.comments.map((comment) => (
-                    <div
-                      key={comment._id}
-                      className="border p-2 rounded bg-gray-50 flex justify-between items-center"
-                    >
-                      <p>{comment.comment_text}</p>
-                      <span className="text-sm text-gray-500">
-                        ↑ {comment.upvotes || 0}
-                      </span>
-                    </div>
-                  ))
+      <div className="space-y-6">
+        {[...solutions]
+          .sort((a, b) => b.upvotes - a.upvotes)
+          .map((solution) => (
+            <div
+              key={solution._id}
+              className="border rounded-lg shadow-sm p-6 bg-white hover:shadow-md transition"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <p className="text-gray-700">{solution.description}</p>
+                <button
+                  onClick={() => handleUpvote(solution._id)}
+                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                >
+                  ↑ Upvote ({solution.upvotes})
+                </button>
+              </div>
+
+              <div className="mb-4">
+                <h4 className="font-semibold text-gray-800 mb-2">Comments</h4>
+                {solution.comments.length > 0 ? (
+                  <div className="space-y-3">
+                    {solution.comments.map((comment) => (
+                      <div
+                        key={comment._id}
+                        className="border p-3 rounded bg-gray-50 flex justify-between items-center"
+                      >
+                        <p className="text-gray-600">{comment.comment_text}</p>
+                        <span className="text-sm text-gray-500">
+                          ↑ {comment.upvotes || 0}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
-                  <p className="text-gray-500 text-sm">No comments yet.</p>
+                  <p className="text-gray-500">No comments yet.</p>
                 )}
               </div>
-            </div>
 
-            <div>
-              <input
-                type="text"
-                value={commentInputs[solution._id] || ""}
-                onChange={(e) =>
-                  setCommentInputs((prev) => ({
-                    ...prev,
-                    [solution._id]: e.target.value,
-                  }))
-                }
-                placeholder="Add a comment..."
-                className="w-full border px-3 py-2 rounded-md outline-none focus:border-blue-500"
-              />
-              <button
-                onClick={() => handleCommentSubmit(solution._id)}
-                className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
-              >
-                Comment
-              </button>
+              <div className="mt-4">
+                <input
+                  type="text"
+                  value={commentInputs[solution._id] || ""}
+                  onChange={(e) =>
+                    setCommentInputs((prev) => ({
+                      ...prev,
+                      [solution._id]: e.target.value,
+                    }))
+                  }
+                  placeholder="Add a comment..."
+                  className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <button
+                  onClick={() => handleCommentSubmit(solution._id)}
+                  className="mt-3 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
+                >
+                  Post Comment
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
   );
 };
