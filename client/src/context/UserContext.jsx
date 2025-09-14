@@ -1,29 +1,25 @@
 import { createContext, useState, useEffect } from "react";
 
-// Create the context
-export const UserContext = createContext(null);
 
-// Provider component
+export const UserContext = createContext();
+
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
-  // Load user from localStorage on initial render
+  const [loading, setLoading] = useState(false);
+  // Initialize from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    setLoading(true);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    console.log(storedUser);
+    if (storedUser?.email) {
+      setUser(storedUser);
     }
+    setLoading(false);
   }, []);
-
-  // Sync user state with localStorage
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [user]);
-
+  console.log(user);
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

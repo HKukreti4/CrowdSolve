@@ -1,12 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import axiosInstance from "./../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { UserContext } from "../context/UserContext";
-import { useEffect } from "react";
 
 const Register = () => {
-  const [loginData, setloginData] = useState({
+  const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
     password: "",
@@ -18,110 +17,125 @@ const Register = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(loginData);
     try {
-      const res = await axiosInstance.post("/auth/register", loginData);
+      const res = await axiosInstance.post("/auth/register", registerData);
       if (res) {
-        setUser(res.data.user);
+        toast.success("Registration Successful");
         navigate("/login");
-        setloginData({ email: "", password: "", name: "" });
-        toast.success("Registration Successfull");
+        setRegisterData({ name: "", email: "", password: "" });
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser?.email) {
       navigate("/");
-    } else {
-      navigate("/register");
     }
-  }, []);
-  return (
-    <div className="flex items-center justify-center h-screen bg-gray-50 bg-gradient-to-r from-red-400 to-indigo-600">
-      <div className="text-center flex flex-col gap-2  bg-white/60 backdrop:blur-2xl  border-2 border-gray-400 py-8 px-12 rounded-md">
-        <h3 className="md:text-2xl text-md font-bold text-red-400 capitalize ">
-          Register
-        </h3>
-        <p>Enter your name, email and password to create the account</p>
+  }, [navigate]);
 
-        <form
-          onSubmit={(e) => submitHandler(e)}
-          className="text-left flex mt-5 flex-col gap-4 items-center"
-        >
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="name" className="font-bold">
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 px-4">
+      <div className="bg-white w-full max-w-md p-8 rounded-xl shadow-lg border border-gray-200">
+        <h3 className="text-2xl font-bold text-center text-indigo-600 mb-4">
+          Create Account
+        </h3>
+        <p className="text-center text-gray-500 mb-6">
+          Fill in your details to get started
+        </p>
+
+        <form onSubmit={submitHandler} className="space-y-5">
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Name
             </label>
             <input
               type="text"
               name="name"
               id="name"
-              value={loginData?.name}
-              placeholder="Enter name"
+              value={registerData.name}
+              placeholder="Enter your name"
               onChange={(e) =>
-                setloginData({ ...loginData, [e.target.name]: e.target.value })
+                setRegisterData({
+                  ...registerData,
+                  [e.target.name]: e.target.value,
+                })
               }
-              className="border-[1px] focus:border-green-400 outline-none px-4 py-2 rounded-md"
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+              required
             />
           </div>
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="email" className="font-bold">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
               type="email"
               name="email"
               id="email"
-              value={loginData?.email}
-              placeholder="Enter email"
+              value={registerData.email}
+              placeholder="Enter your email"
               onChange={(e) =>
-                setloginData({ ...loginData, [e.target.name]: e.target.value })
+                setRegisterData({
+                  ...registerData,
+                  [e.target.name]: e.target.value,
+                })
               }
-              className="border-[1px] focus:border-green-400 outline-none px-4 py-2 rounded-md"
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+              required
             />
           </div>
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="password" className="font-bold">
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
               type="password"
               name="password"
               id="password"
-              value={loginData?.password}
+              value={registerData.password}
+              placeholder="Enter your password"
               onChange={(e) =>
-                setloginData({ ...loginData, [e.target.name]: e.target.value })
+                setRegisterData({
+                  ...registerData,
+                  [e.target.name]: e.target.value,
+                })
               }
-              placeholder="Enter password"
-              className="border-[1px] w-full focus:border-green-400 outline-none px-4 py-2 rounded-md"
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+              required
             />
           </div>
-          {loading ? (
-            <button
-              type="button"
-              className="bg-gray-500 cursor-not-allowed text-white rounded-md py-2"
-            >
-              Loading ...
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="bg-gray-500 px-4 w-full cursor-pointer text-white rounded-md py-2"
-            >
-              Register
-            </button>
-          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg text-white font-semibold transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
         </form>
 
-        <p>
-          Already have an accout ?{" "}
-          <NavLink to={"/login"} className="text-blue-400">
-            Login
+        <p className="text-center text-sm text-gray-600 mt-4">
+          Already have an account?{" "}
+          <NavLink to="/login" className="text-indigo-600 hover:underline">
+            Login Now
           </NavLink>
         </p>
       </div>

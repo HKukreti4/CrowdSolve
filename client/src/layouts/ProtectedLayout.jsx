@@ -1,36 +1,28 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const ProtectedLayout = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      if (storedUser?.email) {
-        // Optionally set the user in context if needed
-        // setUser(storedUser);
-        setCheckingAuth(false);
-      } else {
-        navigate("/login");
-      }
-    } else {
-      setCheckingAuth(false);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!user?.email && (!storedUser || !storedUser.email)) {
+      navigate("/login");
+    } else if (!user?.email && storedUser?.email) {
+      setUser(storedUser);
     }
-  }, [user, navigate]);
+    setLoading(false);
+  }, [user, navigate, setUser]);
 
-  if (checkingAuth) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        Checking authentication...
-      </div>
-    );
+  if (loading) {
+    return <div>Checking user...</div>;
   }
 
-  return <Outlet />;
+  return user?.email ? <Outlet /> : null;
 };
 
 export default ProtectedLayout;

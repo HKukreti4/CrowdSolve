@@ -18,9 +18,7 @@ const Navbar = () => {
       toast.error(error.response?.data?.message || error.message);
     }
   };
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, []);
+
 
   return (
     <>

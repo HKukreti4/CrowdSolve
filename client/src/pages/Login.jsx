@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import axiosInstance from "./../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { UserContext } from "../context/UserContext";
 
@@ -19,14 +19,10 @@ const Login = () => {
     try {
       const res = await axiosInstance.post("/auth/login", loginData);
       if (res) {
-        // Save user to localStorage
         localStorage.setItem("user", JSON.stringify(res.data.user));
-
-        // Update context
         setUser(res.data.user);
-
         toast.success("Login Successful");
-        navigate("/"); // go to home after login
+        navigate("/");
         setloginData({ email: "", password: "" });
       }
     } catch (error) {
@@ -36,27 +32,28 @@ const Login = () => {
     }
   };
 
-  // Redirect if already logged in
   useEffect(() => {
     if (user?.email) {
-      navigate("/"); // prevent going to login again if already logged in
+      navigate("/");
     }
   }, [user, navigate]);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-50 bg-gradient-to-r from-red-400 to-indigo-600">
-      <div className="text-center flex flex-col gap-2 bg-white/60 backdrop:blur-2xl border-2 border-gray-400 py-8 px-12 rounded-md">
-        <h3 className="md:text-2xl text-md font-bold text-red-400 capitalize">
-          Welcome back
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 px-4">
+      <div className="bg-white w-full max-w-md p-8 rounded-xl shadow-lg border border-gray-200">
+        <h3 className="text-2xl font-bold text-center text-indigo-600 mb-4">
+          Welcome Back
         </h3>
-        <p>Enter your email and password to access the account</p>
+        <p className="text-center text-gray-500 mb-6">
+          Enter your email and password to access your account
+        </p>
 
-        <form
-          onSubmit={submitHandler}
-          className="text-left flex mt-5 flex-col gap-4 items-center"
-        >
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="email" className="font-bold">
+        <form onSubmit={submitHandler} className="space-y-5">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
@@ -64,15 +61,18 @@ const Login = () => {
               name="email"
               id="email"
               value={loginData.email}
-              placeholder="Enter email"
+              placeholder="Enter your email"
               onChange={(e) =>
                 setloginData({ ...loginData, [e.target.name]: e.target.value })
               }
-              className="border-[1px] focus:border-green-400 outline-none px-4 py-2 rounded-md"
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
             />
           </div>
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="password" className="font-bold">
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
@@ -83,30 +83,27 @@ const Login = () => {
               onChange={(e) =>
                 setloginData({ ...loginData, [e.target.name]: e.target.value })
               }
-              placeholder="Enter password"
-              className="border-[1px] w-full focus:border-green-400 outline-none px-4 py-2 rounded-md"
+              placeholder="Enter your password"
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
             />
           </div>
-          {loading ? (
-            <button
-              type="button"
-              className="bg-gray-500 cursor-not-allowed text-white rounded-md py-2 w-full"
-            >
-              Loading ...
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="bg-gray-500 px-4 w-full cursor-pointer text-white rounded-md py-2"
-            >
-              Login
-            </button>
-          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg text-white font-semibold transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
 
-        <p>
+        <p className="text-center text-sm text-gray-600 mt-4">
           Don't have an account?{" "}
-          <NavLink to={"/register"} className="text-blue-400">
+          <NavLink to={"/register"} className="text-indigo-600 hover:underline">
             Register Now
           </NavLink>
         </p>
