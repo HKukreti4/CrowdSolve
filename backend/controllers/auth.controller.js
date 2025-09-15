@@ -30,6 +30,8 @@ const loginUser = asyncHandler(async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
+    secure: true, // ensure HTTPS in production
+    sameSite: 'none'
   });
   res.status(200).json({
     message: "Successful login",
@@ -83,6 +85,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
+    secure: true, // ensure HTTPS in production
+    sameSite: 'none'
   });
   res.status(200).json({
     message: "Successfully created the user",
