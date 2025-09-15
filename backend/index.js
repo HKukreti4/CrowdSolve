@@ -11,7 +11,7 @@ const solutionRoutes = require("./routes/solution.routes");
 dotenv.config();
 const app = express();
 app.use(cors({
-  origin: true,
+  origin: ["https://crowd-solve-sooty.vercel.app",],
   credentials: true
 }
 
