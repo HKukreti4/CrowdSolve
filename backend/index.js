@@ -21,7 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
 connectDb();
-
+app.get("/", (req, res) => {
+  res.send("succesfully deployed")
+})
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1", problemRoutes)
 app.use("/api/v1/solution", solutionRoutes)
