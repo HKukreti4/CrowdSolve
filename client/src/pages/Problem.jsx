@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
 import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import { NavLink, useNavigate } from "react-router-dom";
 
+import { NavLink, useNavigate } from "react-router-dom";
+import { GrFormView } from "react-icons/gr";
 const ProblemPage = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,20 +66,29 @@ const ProblemPage = () => {
                 />
               )}
               <div className="p-4">
-                <div className="flex justify-between items-center ">
-                  <h2 className="text-xl font-semibold text-gray-800">
+                <div className="flex flex-col justify-between gap-2 items-start">
+                  <h2 className="text-xl font-semibold text-gray-800 line-clamp-1">
                     {problem.location}
                   </h2>
+                  <p className="text-gray-600 mb-2">{problem.description}</p>
+                </div>
+                <div className="flex gap-2 items-center">
+                  {/* <NavLink
+                    to={`/problem/${problem._id}?userId=${problem.user_id._id}`}
+                  >
+                    <button className="px-2 py-1 cursor-pointer bg-red-400 text-white rounded-md text-xl">
+                      <GrFormView />
+                    </button>
+                  </NavLink> */}
                   <NavLink
                     to={`/problem/${problem._id}?userId=${problem.user_id._id}`}
                   >
-                    <button className="px-2 py-1 bg-green-400 text-white rounded-md">
-                      Show Solutions
+                    <button className="px-2 py-1 cursor-pointer bg-green-400 text-white rounded-md text-sm">
+                      Show Solution
                     </button>
                   </NavLink>
                 </div>
 
-                <p className="text-gray-600 mt-2">{problem.description}</p>
                 <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
                   <div>
                     Reported by:{" "}
