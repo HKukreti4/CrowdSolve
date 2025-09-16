@@ -11,11 +11,9 @@ const solutionRoutes = require("./routes/solution.routes");
 dotenv.config();
 const app = express();
 app.use(cors({
-  origin: ["https://crowd-solve-sooty.vercel.app",],
+  origin: ["https://crowd-solve-sooty.vercel.app"],
   credentials: true
-}
-
-));
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

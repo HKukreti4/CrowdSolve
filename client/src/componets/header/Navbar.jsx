@@ -28,7 +28,7 @@ const Navbar = () => {
           <div className="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xl font-bold">
             C
           </div>
-          <h1 className="text-2xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer">
+          <h1 className="text-2xl font-bold hidden md:block text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer">
             CrowdSolve
           </h1>
         </div>
@@ -68,10 +68,10 @@ const Navbar = () => {
           </NavLink> */}
         </nav>
         {user ? (
-          <div>
+          <div className="flex gap-2 ">
             <NavLink
               to="/problem/post"
-              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+              className="md:px-4 md:py-2 px-2 py-1  flex items-center justify-center  bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
             >
               Post a problem
             </NavLink>{" "}

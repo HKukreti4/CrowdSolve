@@ -22,7 +22,11 @@ const ProtectedLayout = () => {
     return <div>Checking user...</div>;
   }
 
-  return user?.email ? <Outlet /> : null;
+  return user?.email ? (
+    <div className="my-4 md:my-2">
+      <Outlet />
+    </div>
+  ) : null;
 };
 
 export default ProtectedLayout;
